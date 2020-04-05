@@ -1,3 +1,3 @@
 # Docker image based on Alpine Linux with supervisord
 
-[![Docker Pulls](https://img.shields.io/github/downloads/loicbtd/docker-baseimage/total)](https://hub.docker.com/r/linuxserver/heimdall/)
+[![Last Version](https://img.shields.io/docker/v/loicbtd/baseimage?sort=date)](https://hub.docker.com/repository/docker/loicbtd/baseimage/tags)
