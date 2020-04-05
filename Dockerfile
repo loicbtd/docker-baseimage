@@ -7,7 +7,8 @@ RUN \
             supervisor \
             curl \
             vim \
-            bash && \
+            bash \
+            zsh && \
     echo "**** configure abc user ****" && \
         groupmod -g 1000 users && \
         useradd -u 911 -U -d /config -s /bin/false abc && \
