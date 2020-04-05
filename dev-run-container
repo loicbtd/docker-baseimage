@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 CONTAINER_NAME="docker-baseimage"
 IMAGE_BUILD_TAG=$CONTAINER_NAME
