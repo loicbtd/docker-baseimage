@@ -1,1 +1,1 @@
-# docker-baseimage
+# Docker image based on Alpine Linux with supervisord
