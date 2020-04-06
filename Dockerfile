@@ -5,6 +5,7 @@ RUN \
         apk --no-cache add --update \
             shadow \
             supervisor \
+            python3 \
             curl \
             vim \
             bash \
