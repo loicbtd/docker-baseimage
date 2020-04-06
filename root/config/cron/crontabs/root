@@ -1,0 +1,7 @@
+# min   hour    day     month   weekday command
+*       *       *       *       *       run-parts /config/cron/periodic/1min >> /logs/crond/crond.log
+*/15    *       *       *       *       run-parts /config/cron/periodic/15min >> /logs/crond/crond.log
+0       *       *       *       *       run-parts /config/cron/periodic/hourly >> /logs/crond/crond.log
+0       2       *       *       *       run-parts /config/cron/periodic/daily >> /logs/crond/crond.log
+0       3       *       *       6       run-parts /config/cron/periodic/weekly >> /logs/crond/crond.log
+0       5       1       *       *       run-parts /config/cron/periodic/monthly >> /logs/crond/crond.log
