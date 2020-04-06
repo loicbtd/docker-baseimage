@@ -6,6 +6,7 @@ RUN \
             shadow \
             supervisor \
             python3 \
+            git \
             curl \
             vim \
             bash \
