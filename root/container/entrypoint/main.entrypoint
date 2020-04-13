@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ "$SETTINGS_SOURCE" != "none" ]; then
+    echo "**** getting settings file ****"
+    /container/app/manager/get-settings || exit 1
+
+    echo "**** locking settings file ****"
+    /container/app/manager/update-settings
+fi
+
+echo "**** running subentrypoints ****"
+for subentrypoint in /entrypoint/subentrypoints/*.entrypoint; do
+    chmod +x "$subentrypoint"
+    "$subentrypoint"
+done
+
+echo "**** starting crond ****"
+crond -c /config/crond/crontabs -L /logs/crond/crond.log -b -l 8
+
+echo "**** starting supervisord ****"
+supervisord --nodaemon --configuration /config/supervisord.conf

@@ -1,5 +1,15 @@
 FROM alpine:3.10.4
 
+ENV \ 
+    SETTINGS_SOURCE="none" \
+    SETTINGS_SHELIFIED="{}" \
+    SETTINGS_AUTOMATED_UPDATE="true" \
+    SETTINGS_GIT_AUTOMATED_PULL="false" \
+    SETTINGS_GIT_HOST="" \
+    SETTINGS_GIT_USERNAME="" \
+    SETTINGS_GIT_REPOSITORY="" \
+    SETTINGS_GIT_TOKEN=""
+
 RUN \
     echo "**** install packages ****" && \
         apk --no-cache add --update \
@@ -11,14 +21,11 @@ RUN \
             vim \
             bash \
             zsh && \
-    echo "**** configure abc user ****" && \
-        groupmod -g 1000 users && \
-        useradd -u 911 -U -d /config -s /bin/false abc && \
-        usermod -G users abc && \
-        mkdir -p /config
+        pip3 install --upgrade pip && \
+        pip3 install \
+            jsonschema \
+            deepdiff
 
 COPY root/ /
 
-VOLUME /config
-
-ENTRYPOINT ["/entrypoint/start"]
+ENTRYPOINT ["/container/entrypoint/main.entrypoint"]

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# To enable a script at startup:
+# 1. Place it into /entrypoint/subentrypoints
+# 2. Name it myservive.entrypoint

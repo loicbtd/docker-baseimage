@@ -1,0 +1,5 @@
+#!/bin/bash
+
+/container/app/manager/get-settings \
+    && /container/app/manager/update-settings
+    && /container/app/manager/apply-settings

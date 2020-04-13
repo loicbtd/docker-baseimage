@@ -1,0 +1,16 @@
+#!/bin/bash
+
+PATH_FILE_SETTINGS="/container/settings/settings.json"
+PATH_FILE_SETTINGS_LOCK="/container/app/settings.lock.json"
+
+main(){
+    python3 /container/app/tools/are_json_differents.py $PATH_FILE_SETTINGS $PATH_FILE_SETTINGS_LOCK \
+        && echo "NOTICE: new settings detected, updating"
+        && cp $PATH_FILE_SETTINGS $PATH_FILE_SETTINGS_LOCK \
+        && /container/app/manager/apply-settings
+        && exit 0
+        || echo "NOTICE: no new settings found, skipping"
+        || exit 1
+}
+
+main "$@"

@@ -1,4 +1,0 @@
-[program:<JOB_NAME>-<PORT>]
-command=<PATH_TO_START_FILE> --port=<PORT>
-stderr_logfile = <PATH_TO_ERROR_LOG_FILE>
-stdout_logfile = <PATH_TO__LOG_FILE>

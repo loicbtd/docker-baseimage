@@ -1,0 +1,48 @@
+#!/bin/bash
+
+PATH_FILE_SETTINGS="/container/settings/settings.json"
+PATH_FILE_SETTINGS_SCHEMA="/container/app/settings.schema.json"
+
+get_settings_from_env(){
+    local path_file_settings=$1
+    touch $path_file_settings \
+    && echo "$SETTINGS_SHELIFIED" > $path_file_settings \
+    && return 0 || return 1
+}
+
+get_settings_from_git(){
+    local path_file_settings=$1
+    mkdir -p /tmp/git/settings && cd /tmp/git/settings && git init || cd - || rm -rf /tmp/git || return 1
+    if [ "$SETTINGS_SOURCE" = "gitlab" ]; then
+        git pull https://oauth2:$SETTINGS_GIT_TOKEN@$SETTINGS_GIT_HOST/$SETTINGS_GIT_USERNAME/$SETTINGS_GIT_REPOSITORY.git \
+        && cp ./settings.json $path_file_settings \
+        || cd - || rm -rf /tmp/git || return 1
+    fi
+    if [ "$SETTINGS_SOURCE" = "github" ]; then
+        git pull https://x-access-token:$SETTINGS_GIT_TOKEN@github.com/$SETTINGS_GIT_USERNAME/$SETTINGS_GIT_REPOSITORY.git \
+        && cp ./settings.json $path_file_settings \
+        || cd - || rm -rf /tmp/git || return 1
+    fi
+    cd -
+    rm -rf /tmp/git 
+    return 0    
+}
+
+main(){
+    if [ "$SETTINGS_SOURCE" = "shell" ]; then
+        get_settings_from_env $PATH_FILE_SETTINGS \
+        && echo "NOTICE: successfuly got settings from env" \
+        || echo "ERROR: cannot get settings from env" || exit 1
+    fi
+    if [[ "$SETTINGS_SOURCE" == "git"* ]]; then 
+        get_settings_from_git $PATH_FILE_SETTINGS \
+        && echo "NOTICE: successfully pulled settings from specified git repository" \
+        || echo "ERROR: cannot pull settings from specified git repository" || exit 1
+    fi
+    python3 /container/app/tools/validate_json_schema.py $PATH_FILE_SETTINGS $PATH_FILE_SETTINGS_SCHEMA \
+        && echo "NOTICE: settings file schema is VALID" \
+        || echo "ERROR: settings file schema is INVALID" || exit 1
+    exit 0
+}
+
+main "$@"

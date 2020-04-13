@@ -1,0 +1,60 @@
+#!/bin/bash
+
+PATH_FILE_SETTINGS="/container/settings/settings.json"
+PATH_FILE_SETTINGS_LOCK="/container/app/settings.lock.json"
+PATH_FILE_SETTINGS_SCHEMA="/container/app/settings.schema.json"
+
+manage_automated_update(){
+    for cron in /container/config/crond/periodic/*; do rm $cron/automated-update done
+    [ $SETTINGS_AUTOMATED_UPDATE="1min" ] \
+        && cp /container/config/crond/periodic/.jobs/automated-update \
+            /container/config/crond/periodic/1min/
+    [ $SETTINGS_AUTOMATED_UPDATE="15min" ] \
+        && cp /container/config/crond/periodic/.jobs/automated-update \
+            /container/config/crond/periodic/15min/
+    [ $SETTINGS_AUTOMATED_UPDATE="hourly" ] \
+        && cp /container/config/crond/periodic/.jobs/automated-update \
+            /container/config/crond/periodic/hourly/
+    [ $SETTINGS_AUTOMATED_UPDATE="daily" ] \
+        && cp /container/config/crond/periodic/.jobs/automated-update \
+            /container/config/crond/periodic/daily/
+    [ $SETTINGS_AUTOMATED_UPDATE="weekly" ] \
+        && cp /container/config/crond/periodic/.jobs/automated-update \
+            /container/config/crond/periodic/weekly/
+    [ $SETTINGS_AUTOMATED_UPDATE="monthly" ] \
+        && cp /container/config/crond/periodic/.jobs/automated-update \
+            /container/config/crond/periodic/monthly/
+}
+
+manage_automated_git_pull(){
+    for cron in /container/config/crond/periodic/*; do rm $cron/git-automated-pull done
+    [ $SETTINGS_AUTOMATED_UPDATE="1min" ] \
+        && cp /container/config/crond/periodic/.jobs/git-automated-pull \
+            /container/config/crond/periodic/1min/
+    [ $SETTINGS_AUTOMATED_UPDATE="15min" ] \
+        && cp /container/config/crond/periodic/.jobs/git-automated-pull \
+            /container/config/crond/periodic/15min/
+    [ $SETTINGS_AUTOMATED_UPDATE="hourly" ] \
+        && cp /container/config/crond/periodic/.jobs/git-automated-pull \
+            /container/config/crond/periodic/hourly/
+    [ $SETTINGS_AUTOMATED_UPDATE="daily" ] \
+        && cp /container/config/crond/periodic/.jobs/git-automated-pull \
+            /container/config/crond/periodic/daily/
+    [ $SETTINGS_AUTOMATED_UPDATE="weekly" ] \
+        && cp /container/config/crond/periodic/.jobs/git-automated-pull \
+            /container/config/crond/periodic/weekly/
+    [ $SETTINGS_AUTOMATED_UPDATE="monthly" ] \
+        && cp /container/config/crond/periodic/.jobs/git-automated-pull \
+            /container/config/crond/periodic/monthly/
+}
+
+main(){
+    manage_automated_update
+    manage_automated_git_pull
+    for afterupdate in /container/settings/afterupdate/*.afterupdate; do
+        chmod +x "$afterupdate"
+        "$afterupdate"
+    done   
+}
+
+main "$@"

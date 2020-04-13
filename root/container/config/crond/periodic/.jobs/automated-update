@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/container/app/manager/update-settings
+    && /container/app/manager/apply-settings
